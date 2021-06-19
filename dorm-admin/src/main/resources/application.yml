@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: DormAdmin
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dormadmin?serverTimezone=GMT%2B8&characterEncoding=utf-8
+    username: root
+    password: 123456
+    hikari:
+      maximum-pool-size: 100
+      idleTimeout: 600000
+      connectionTimeout: 30000
+      maxLifetime: 1800000
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 7
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+
+logging:
+  level:
+    com.kaiyu.dao: debug
+
