@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaiyu.dao.UserRoleDao">
+
+    <delete id="deleteByUserId">
+        delete
+        from user_role
+        where uid = #{uid}
+    </delete>
+
+    <insert id="addRole">
+        insert into user_role (uid,rid) values
+        <foreach collection="rids" item="rid" separator=",">
+            (#{uid},#{rid})
+        </foreach>
+    </insert>
+
+</mapper>

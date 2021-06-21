@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaiyu.dao.MenuDao">
+    <resultMap id="BaseResultMap" type="com.kaiyu.entity.Menu">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="component" jdbcType="VARCHAR" property="component"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="iconCls" jdbcType="VARCHAR" property="iconCls"/>
+        <result column="parentId" jdbcType="INTEGER" property="parentId"/>
+        <result column="enabled" jdbcType="BOOLEAN" property="enabled"/>
+        <association property="meta" javaType="com.kaiyu.entity.Meta">
+            <result column="keepAlive" property="keepAlive" jdbcType="BIT"/>
+            <result column="requireAuth" property="requireAuth" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="MenuWithRole" type="com.kaiyu.entity.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="com.kaiyu.entity.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllMenusWithRole" resultMap="MenuWithRole">
+        select m.*, r.`id` as rid, r.`name` as rname, r.`nameZh` as rnameZh
+        from menu m,
+             menu_role mr,
+             role r
+        where m.`id` = mr.`mid`
+          and mr.`rid` = r.`id`
+        order by m.`id`
+    </select>
+
+
+</mapper>

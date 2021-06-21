@@ -1,15 +1,19 @@
 package com.kaiyu.dao;
 
+import com.kaiyu.entity.Role;
 import com.kaiyu.entity.User;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * @author mxxxl
- * @date 2021/6/15
+ * @date 2021/6/19
  */
+@Repository
 public interface UserDao {
 
+    User findByUsername(String username);
 
+    List<Role> getUserRolesById(Integer userId);
 }
