@@ -31,15 +31,16 @@
           >
             <template slot="title">
               <i
-                style="color: #409eff;margin-right: 5px"
+                style="color: #409eff;margin-right: 5px;"
                 :class="item.iconCls"
               ></i>
-              <span>{{item.name}}</span>
+              <span style="font-size:18px">{{item.name}}</span>
             </template>
             <el-menu-item
               :index="child.path"
               v-for="(child,indexj) in item.children"
               :key="indexj"
+              style="font-size:16px"
             >
               {{child.name}}
             </el-menu-item>
