@@ -1,5 +1,6 @@
 <template>
     <div>
+        <img src="../assets/logo.png" alt="">
         <el-form
                 :rules="rules"
                 ref="loginForm"
