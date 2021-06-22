@@ -34,6 +34,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     "Authentication method not supported: " + request.getMethod());
         }
         String verifyCode = (String) request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        request.getSession().removeAttribute(Constants.KAPTCHA_SESSION_KEY);
         if (request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
             Map<String, String> loginData = new HashMap<>(16);
             try {

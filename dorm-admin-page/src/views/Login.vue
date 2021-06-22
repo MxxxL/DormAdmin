@@ -23,7 +23,6 @@
                           placeholder="点击图片更换验证码" @keydown.enter.native="submitLogin" style="width: 250px"></el-input>
                 <img :src="vcUrl" @click="updateVerifyCode" alt="" style="cursor: pointer">
             </el-form-item>
-            <el-checkbox size="normal" class="loginRemember" v-model="checked"></el-checkbox>
             <el-button size="normal" type="primary" style="width: 100%;" @click="submitLogin">登录</el-button>
         </el-form>
     </div>
@@ -36,7 +35,7 @@
         data() {
             return {
                 loading: false,
-                vcUrl: '/api/verifyCode',
+                vcUrl: '/api/verifyCode?time='+new Date(),
                 loginForm: {
                     username: '',
                     password: '',
@@ -52,22 +51,21 @@
         },
         methods: {
             updateVerifyCode() {
-                this.vcUrl = this.getRequest('/verifyCode?time='+new Date());
-                // '/verifyCode?time='+new Date();
+                this.vcUrl = '/api/verifyCode?time='+new Date();
             },
             submitLogin() {
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
                         this.loading = true;
-                        this.postRequest('/doLogin', this.loginForm).then(resp => {
+                        this.postRequest('/api/doLogin', this.loginForm).then(resp => {
                             this.loading = false;
                             if (resp) {
-                                this.$store.commit('INIT_CURRENTHR', resp.obj);
+                                this.$store.commit('INIT_CURRENTUSER', resp.obj);
                                 window.sessionStorage.setItem("user", JSON.stringify(resp.obj));
                                 let path = this.$route.query.redirect;
                                 this.$router.replace((path == '/' || path == undefined) ? '/home' : path);
                             }else{
-                                this.vcUrl = '/verifyCode?time='+new Date();
+                                this.vcUrl = '/api/verifyCode?time='+new Date();
                             }
                         })
                     } else {

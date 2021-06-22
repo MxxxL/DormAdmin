@@ -3,9 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import ElementUI from 'element-ui'
 import { MessageBox } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'font-awesome/css/font-awesome.min.css'
 
 Vue.prototype.$ELEMENT = {size: 'small', zIndex: 3000};
 Vue.use(ElementUI)
@@ -25,7 +27,7 @@ Vue.prototype.getRequest = getRequest;
 
 Vue.config.productionTip = false
 
-/* router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
     if (to.path == '/') {
         next();
     } else {
@@ -36,10 +38,11 @@ Vue.config.productionTip = false
             next('/?redirect=' + to.path);
         }
     }
-}) */
+})
 
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

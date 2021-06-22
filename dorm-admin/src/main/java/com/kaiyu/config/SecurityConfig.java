@@ -7,6 +7,7 @@ import com.kaiyu.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,10 +33,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     CustomFilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource;
+
     @Autowired
     CustomUrlDecisionManager customUrlDecisionManager;
+
     @Autowired
-    private UserServiceImpl userService;
+    UserServiceImpl userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -62,7 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     LoginFilter loginFilter() throws Exception {
         LoginFilter loginFilter = new LoginFilter();
         loginFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
-                    response.setContentType("application/json;charset=utf-8");
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.setCharacterEncoding("UTF-8");
                     PrintWriter out = response.getWriter();
                     User user = (User) authentication.getPrincipal();
                     user.setPassword(null);
@@ -74,17 +78,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 }
         );
         loginFilter.setAuthenticationFailureHandler((request, response, exception) -> {
-                    response.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = response.getWriter();
-                    ResponseMsg responseMsg = ResponseMsg.error(exception.getMessage());
-                    if (exception instanceof LockedException) {
-                        responseMsg.setMsg("账户被锁定，请联系管理员!");
-                    } else if (exception instanceof CredentialsExpiredException) {
-                        responseMsg.setMsg("密码过期，请联系管理员!");
-                    } else if (exception instanceof AccountExpiredException) {
-                        responseMsg.setMsg("账户过期，请联系管理员!");
-                    } else if (exception instanceof DisabledException) {
-                        responseMsg.setMsg("账户被禁用，请联系管理员!");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            ResponseMsg responseMsg = ResponseMsg.error(exception.getMessage());
+            if (exception instanceof LockedException) {
+                responseMsg.setMsg("账户被锁定，请联系管理员!");
+            } else if (exception instanceof CredentialsExpiredException) {
+                responseMsg.setMsg("密码过期，请联系管理员!");
+            } else if (exception instanceof AccountExpiredException) {
+                responseMsg.setMsg("账户过期，请联系管理员!");
+            } else if (exception instanceof DisabledException) {
+                responseMsg.setMsg("账户被禁用，请联系管理员!");
                     } else if (exception instanceof BadCredentialsException) {
                         responseMsg.setMsg("用户名或者密码输入错误，请重新输入!");
                     }
@@ -94,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 }
         );
         loginFilter.setAuthenticationManager(authenticationManagerBean());
-        loginFilter.setFilterProcessesUrl("/doLogin");
+        loginFilter.setFilterProcessesUrl("/api/doLogin");
         return loginFilter;
     }
 
@@ -111,8 +116,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .and()
                 .logout()
+                .logoutUrl("/api/logout")
                 .logoutSuccessHandler((req, resp, authentication) -> {
-                            resp.setContentType("application/json;charset=utf-8");
+                            resp.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            resp.setCharacterEncoding("UTF-8");
                             PrintWriter out = resp.getWriter();
                             out.write(new ObjectMapper().writeValueAsString(ResponseMsg.ok("注销成功!")));
                             out.flush();
@@ -124,7 +131,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().exceptionHandling()
                 //没有认证时，在这里处理结果，不要重定向
                 .authenticationEntryPoint((req, resp, authException) -> {
-                            resp.setContentType("application/json;charset=utf-8");
+                            resp.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            resp.setCharacterEncoding("UTF-8");
                             resp.setStatus(401);
                             PrintWriter out = resp.getWriter();
                             ResponseMsg responseMsg = ResponseMsg.error("访问失败!");

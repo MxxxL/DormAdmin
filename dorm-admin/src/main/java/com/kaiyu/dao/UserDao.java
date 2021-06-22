@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface UserDao {
 
+    int saveUser(String username, String password);
+
     User findByUsername(String username);
 
     List<Role> getUserRolesById(Integer userId);

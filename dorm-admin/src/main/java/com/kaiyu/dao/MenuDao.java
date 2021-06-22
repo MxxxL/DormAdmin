@@ -13,4 +13,6 @@ import java.util.List;
 public interface MenuDao {
 
     List<Menu> getAllMenusWithRole();
+
+    List<Menu> getMenusByUserId(Integer userId);
 }

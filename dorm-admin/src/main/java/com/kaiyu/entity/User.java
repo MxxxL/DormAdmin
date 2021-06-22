@@ -62,6 +62,9 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (null == roles) {
+            return null;
+        }
         List<SimpleGrantedAuthority> authorities = new ArrayList<>(roles.size());
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));

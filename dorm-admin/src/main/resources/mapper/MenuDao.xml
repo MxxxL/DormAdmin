@@ -24,6 +24,23 @@
         </collection>
     </resultMap>
 
+    <resultMap id="Menus2" type="com.kaiyu.entity.Menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.kaiyu.entity.Menu">
+            <id column="id2" property="id" jdbcType="INTEGER"/>
+            <result column="url2" property="url" jdbcType="VARCHAR"/>
+            <result column="path2" property="path" jdbcType="VARCHAR"/>
+            <result column="component2" property="component" jdbcType="VARCHAR"/>
+            <result column="name2" property="name" jdbcType="VARCHAR"/>
+            <result column="iconCls2" property="iconCls" jdbcType="VARCHAR"/>
+            <result column="parentId2" property="parentId" jdbcType="INTEGER"/>
+            <result column="enabled2" property="enabled" jdbcType="BIT"/>
+            <association property="meta" javaType="com.kaiyu.entity.Meta">
+                <result column="keepAlive2" property="keepAlive" jdbcType="BIT"/>
+                <result column="requireAuth2" property="requireAuth" jdbcType="BIT"/>
+            </association>
+        </collection>
+    </resultMap>
+
     <select id="getAllMenusWithRole" resultMap="MenuWithRole">
         select m.*, r.`id` as rid, r.`name` as rname, r.`nameZh` as rnameZh
         from menu m,
@@ -32,6 +49,29 @@
         where m.`id` = mr.`mid`
           and mr.`rid` = r.`id`
         order by m.`id`
+    </select>
+
+    <select id="getMenusByUserId" resultMap="Menus2">
+        select distinct m1.*,
+                        m2.`id`          as id2,
+                        m2.`component`   as component2,
+                        m2.`enabled`     as enabled2,
+                        m2.`iconCls`     as iconCls2,
+                        m2.`keepAlive`   as keepAlive2,
+                        m2.`name`        as name2,
+                        m2.`parentId`    as parentId2,
+                        m2.`requireAuth` as requireAuth2,
+                        m2.`path`        as path2
+        from menu m1,
+             menu m2,
+             user_role ur,
+             menu_role mr
+        where m1.`id` = m2.`parentId`
+          and ur.`uid` = #{userId}
+          and ur.`rid` = mr.`rid`
+          and mr.`mid` = m2.`id`
+          and m2.`enabled` = true
+        order by m1.`id`, m2.`id`
     </select>
 
 

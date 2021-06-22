@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaiyu.dao.UserDao">
+    <insert id="saveUser">
+        insert into user(username, password)
+        values (#{param1}, #{param2})
+    </insert>
 
     <select id="findByUsername" resultType="com.kaiyu.entity.User">
         select *
