@@ -14,7 +14,7 @@ class DormAdminApplicationTests {
 
     @Test
     void contextLoads() {
-        int result = userService.userReg("test", "123");
+        int result = userService.userReg("test", "123456");
         Assertions.assertEquals(1, result);
     }
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaiyu.dao.BuildingDao">
+
+    <resultMap id="baseResultMap" type="com.kaiyu.entity.Building">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="buildingType" column="building_type"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <select id="getBuildingByName" resultMap="baseResultMap">
+        select id,name,building_type,remark
+        from building
+        <where>
+            <if test="buildingName != null and buildingName !=''">
+                name like CONCAT('%',#{buildingName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getBuildingAll" resultMap="baseResultMap">
+        select id, name, building_type, remark
+        from building
+    </select>
+
+    <insert id="saveBuilding" parameterType="com.kaiyu.entity.Building">
+        insert into building(name, building_type, remark)
+        VALUES (#{name}, #{buildingType}, #{remark})
+    </insert>
+
+    <update id="editBuilding" parameterType="com.kaiyu.entity.Building">
+        update building
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="buildingType != null ">
+                building_type = #{buildingType},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBuildings" parameterType="integer">
+        delete from building
+        where id in
+        <foreach collection="ids" item="idsItem" open="(" separator="," close=")">
+            #{idsItem}
+        </foreach>
+    </delete>
+</mapper>

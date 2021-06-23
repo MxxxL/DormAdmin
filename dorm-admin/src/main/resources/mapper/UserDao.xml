@@ -2,10 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaiyu.dao.UserDao">
+
+    <resultMap id="related" type="com.kaiyu.entity.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="enabled" property="enabled"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="remark" property="remark"/>
+        <collection property="roles" ofType="com.kaiyu.entity.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
     <insert id="saveUser">
         insert into user(username, password)
         values (#{param1}, #{param2})
     </insert>
+
+    <update id="updatePassword">
+        update user
+        set password = #{password}
+        where id = #{userId}
+    </update>
+
+    <update id="updateUser" parameterType="com.kaiyu.entity.User">
+        update user
+        <set>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="phone != null and phone != '' ">
+                phone = #{phone},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled},
+            </if>
+            <if test="remark != null and remark != '' ">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUser">
+        delete
+        from user
+        where id = #{userId}
+    </delete>
 
     <select id="findByUsername" resultType="com.kaiyu.entity.User">
         select *
@@ -21,5 +68,21 @@
           and ur.uid = #{id}
     </select>
 
+    <select id="findUserById" resultType="com.kaiyu.entity.User">
+        select id, name, phone, enabled, username, password, remark
+        from user
+        where id = #{userId}
+    </select>
+
+    <select id="getUserByName" resultMap="related">
+        select u.id, u.name, u.phone, u.enabled, u.username, u.password, u.remark
+        ,r.id as rid,r.name as rname,r.nameZh as rnameZh
+        from user u
+        left join user_role ur on u.id = ur.uid
+        left join role r on ur.rid = r.id where u.id != #{userId}
+        <if test="name!=null and ''">
+            and u.name like CONCAT('%',#{name},'%')
+        </if>
+    </select>
 
 </mapper>

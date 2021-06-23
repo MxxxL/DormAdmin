@@ -35,6 +35,9 @@ export const postRequest = (url, params) => {
     return axios({
         method: 'post',
         url: `${base}${url}`,
+        headers: {
+            "Content-Type":"application/json"
+        },
         data: params
     })
 }

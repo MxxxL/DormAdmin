@@ -27,10 +27,10 @@ public class StudentService {
     public ResponsePage getStudentByName(Integer page, Integer size, String studentName) {
         startPage(page, size);
         List<Student> students = studentDao.getStudentByName(studentName);
-        PageInfo<Student> list = new PageInfo<>(students);
+        PageInfo<Student> pageInfo = new PageInfo<>(students);
         ResponsePage responsePage = new ResponsePage();
         responsePage.setData(students);
-        responsePage.setTotal(list.getTotal());
+        responsePage.setTotal(pageInfo.getTotal());
         return responsePage;
     }
 

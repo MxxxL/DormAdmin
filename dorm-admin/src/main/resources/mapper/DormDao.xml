@@ -19,8 +19,53 @@
         </association>
     </resultMap>
 
+    <insert id="saveDorm">
+        insert into dorm(name, building_id, max_num, remark)
+        VALUES (#{name}, #{buildingId}, #{maxNum}, #{remark})
+    </insert>
+
+    <update id="editDorm">
+        update dorm
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="buildingId != null and buildingId != ''">
+                building_id = #{buildingId},
+            </if>
+            <if test="maxNum != null and maxNum != ''">
+                max_num = #{maxNum},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDorms" parameterType="integer">
+        delete from dorm
+        where id in
+        <foreach collection="ids" item="idsItem" open="(" separator="," close=")">
+            #{idsItem}
+        </foreach>
+    </delete>
+
     <select id="getDormAll" resultMap="baseResultMap">
         select id, name, building_id, max_num, remark
         from dorm
     </select>
+
+    <select id="getDormByName" resultMap="related">
+        select d.id, d.name, d.building_id, d.max_num, d.remark, b.id as bid,b.name as bname
+        from dorm d
+        left join building b on b.id = d.building_id
+        <where>
+            <if test="dormName!=null and dormName!=''">
+                d.name like CONCAT('%',#{dormName},'%')
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

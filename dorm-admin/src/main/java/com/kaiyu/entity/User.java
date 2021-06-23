@@ -1,7 +1,9 @@
 package com.kaiyu.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +33,7 @@ public class User implements UserDetails {
      */
     private String phone;
 
+    @Getter(value = AccessLevel.NONE)
     private Boolean enabled;
 
     /**
