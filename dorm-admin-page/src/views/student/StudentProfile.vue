@@ -236,14 +236,12 @@ export default {
     showAddStudent() {
       this.title = "添加学生";
       this.emptyStudent();
-      this.initDorm();
       this.dialogVisible = true;
     },
     showEditStudent(data) {
       this.title = "编辑学生";
-      this.initDorm();
       this.student = data;
-      this.student.dormId = data.dorm.id;
+      this.student.dormId = data.dormId;
       this.dialogVisible = true;
     },
     addOrEditStudent() {
