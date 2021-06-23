@@ -42,10 +42,6 @@ public class StudentService {
         return studentDao.editStudent(student);
     }
 
-    public int deleteStudent(Integer id) {
-        return studentDao.deleteStudent(id);
-    }
-
     public int deleteStudents(List<Student> students) {
         List<Integer> ids = new ArrayList<>();
         for (Student student : students) {

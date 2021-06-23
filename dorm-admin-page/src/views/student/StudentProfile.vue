@@ -205,12 +205,14 @@ export default {
     },
     initStudent() {
       this.loading = true;
-      let url =
-        "/api/student/?page=" + this.currentPage + "&size=" + this.pageSize;
+      const params = {
+        page: this.currentPage,
+        size: this.pageSize
+      };
       if (this.keyword != null && this.keyword != "") {
-        url += "&name=" + this.keyword;
+        params.name = this.keyword;
       }
-      this.getRequest(url).then(resp => {
+      this.getRequest("/api/student/list", params).then(resp => {
         this.loading = false;
         if (resp) {
           this.studentList = resp.data;
@@ -248,7 +250,7 @@ export default {
       if (this.student.id) {
         this.$refs["studentForm"].validate(valid => {
           if (valid) {
-            this.putRequest("/api/student/change", this.student).then(resp => {
+            this.postRequest("/api/student/add", this.student).then(resp => {
               if (resp) {
                 this.dialogVisible = false;
                 this.initStudent();
@@ -259,7 +261,7 @@ export default {
       } else {
         this.$refs["studentForm"].validate(valid => {
           if (valid) {
-            this.postRequest("/api/student/change", this.student).then(resp => {
+            this.postRequest("/api/student/add", this.student).then(resp => {
               if (resp) {
                 this.dialogVisible = false;
                 this.initStudent();
@@ -280,7 +282,7 @@ export default {
         }
       )
         .then(() => {
-          this.deleteRequest("/api/student/" + data.id).then(resp => {
+          this.postRequest("/api/student/del", [data]).then(resp => {
             if (resp) {
               this.$message({
                 type: "info",
@@ -304,7 +306,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.deleteRequest("/api/student/", this.ids).then(resp => {
+          this.postRequest("/api/student/del", this.ids).then(resp => {
             if (resp) {
               this.$message({
                 type: "info",

@@ -20,42 +20,30 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/")
-    public ResponsePage getStudentPage(@RequestParam("page") Integer page,
-                                       @RequestParam("size") Integer size,
-                                       @RequestParam(name = "name", required = false) String studentName) {
-        return studentService.getStudentByName(page, size, studentName);
+    @GetMapping("/list")
+    public ResponsePage getStudentPage(Integer page, Integer size, String name) {
+        return studentService.getStudentByName(page, size, name);
     }
 
-    @PostMapping("/change")
-    public ResponseMsg saveStudent(@RequestBody Student student) {
-        if (studentService.saveStudent(student) >= 1) {
-            return ResponseMsg.ok("添加成功！");
+    @PostMapping("/add")
+    public ResponseMsg saveOrEditStudent(@RequestBody Student student) {
+        if (null == student.getId()) {
+            if (studentService.saveStudent(student) >= 1) {
+                return ResponseMsg.ok("添加成功！");
+            } else {
+                return ResponseMsg.error("添加失败！");
+            }
         } else {
-            return ResponseMsg.error("添加失败！");
+            if (studentService.editStudent(student) >= 1) {
+                return ResponseMsg.ok("修改成功！");
+            } else {
+                return ResponseMsg.error("修改失败！");
+            }
         }
     }
 
-    @PutMapping("/change")
-    public ResponseMsg editStudent(@RequestBody Student student) {
-        if (studentService.editStudent(student) >= 1) {
-            return ResponseMsg.ok("修改成功！");
-        } else {
-            return ResponseMsg.error("修改失败！");
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseMsg deleteStudent(@PathVariable("id") Integer id) {
-        if (studentService.deleteStudent(id) >= 1) {
-            return ResponseMsg.ok("删除成功！");
-        } else {
-            return ResponseMsg.error("删除失败！");
-        }
-    }
-
-    @DeleteMapping("/")
-    public ResponseMsg deleteStudents(List<Student> students) {
+    @PostMapping("/del")
+    public ResponseMsg deleteStudents(@RequestBody List<Student> students) {
         if (studentService.deleteStudents(students) >= 1) {
             return ResponseMsg.ok("删除成功！");
         } else {

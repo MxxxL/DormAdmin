@@ -19,7 +19,5 @@ public interface StudentDao {
 
     int editStudent(Student student);
 
-    int deleteStudent(Integer id);
-
     int deleteStudents(@Param("ids") List<Integer> ids);
 }

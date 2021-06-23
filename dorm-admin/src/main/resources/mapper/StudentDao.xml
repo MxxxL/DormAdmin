@@ -43,12 +43,6 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteStudent" parameterType="integer">
-        delete
-        from student
-        where id = #{id}
-    </delete>
-
     <delete id="deleteStudents" parameterType="integer">
         delete from student
         where id in
