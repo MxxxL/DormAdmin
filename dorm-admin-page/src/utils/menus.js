@@ -40,8 +40,8 @@ export const formatRoutes = (routes) => {
                     require(['../views/student/' + component + '.vue'], resolve);
                 } else if (component.startsWith("Building")) {
                     require(['../views/building/' + component + '.vue'], resolve);
-                } else if (component.startsWith("Room")) {
-                    require(['../views/room/' + component + '.vue'], resolve);
+                } else if (component.startsWith("Dorm")) {
+                    require(['../views/dorm/' + component + '.vue'], resolve);
                 } else if (component.startsWith("User")) {
                     require(['../views/user/' + component + '.vue'], resolve);
                 } else if (component.startsWith("System")) {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaiyu.dao.DormDao">
+
+    <resultMap id="baseResultMap" type="com.kaiyu.entity.Dorm">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="buildingId" column="building_id"/>
+        <result property="maxNum" column="max_num"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <resultMap id="related" extends="baseResultMap" type="com.kaiyu.entity.Dorm">
+        <association property="building" javaType="com.kaiyu.entity.Building">
+            <id property="id" column="bid"/>
+            <result property="name" column="bname"/>
+        </association>
+    </resultMap>
+
+    <select id="getDormAll" resultMap="baseResultMap">
+        select id, name, building_id, max_num, remark
+        from dorm
+    </select>
+</mapper>

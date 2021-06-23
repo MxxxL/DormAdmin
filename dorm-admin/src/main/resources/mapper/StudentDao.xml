@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaiyu.dao.StudentDao">
+
+    <resultMap id="baseResultMap" type="com.kaiyu.entity.Student">
+        <id property="id" column="id"/>
+        <result property="studentNo" column="student_no"/>
+        <result property="studentName" column="student_name"/>
+        <result property="sex" column="sex"/>
+        <result property="dormId" column="dorm_id"/>
+    </resultMap>
+
+    <resultMap id="relatedMap" type="com.kaiyu.entity.Student" extends="baseResultMap">
+        <association property="dorm" javaType="com.kaiyu.entity.Dorm">
+            <id property="id" column="did"/>
+            <result property="name" column="dname"/>
+        </association>
+    </resultMap>
+
+    <insert id="saveStudent" parameterType="com.kaiyu.entity.Student">
+        insert into student(student_no, student_name, sex, dorm_id)
+        VALUES (#{studentNo}, #{studentName}, #{sex}, #{dormId})
+    </insert>
+
+    <update id="editStudent" parameterType="com.kaiyu.entity.Student">
+        update student
+        <set>
+            <if test="studentNo != null and studentNo != ''">
+                student_no = #{studentNo},
+            </if>
+            <if test="studentName != null and studentName != ''">
+                student_name = #{studentName},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="dormId != null and dormId != ''">
+                dorm_id = #{dormId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudent" parameterType="integer">
+        delete
+        from student
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteStudents" parameterType="integer">
+        delete from student
+        where id in
+        <foreach collection="ids" item="idsItem" open="(" separator="," close=")">
+            #{idsItem}
+        </foreach>
+    </delete>
+
+    <select id="getStudentByName" resultMap="relatedMap">
+        select s.id,s.student_no,s.student_name,s.sex,s.dorm_id,d.id as did,d.name as dname
+        from student s
+        left join dorm d on d.id = s.dorm_id
+        <where>
+            <if test="studentName != null and studentName !=''">
+                s.student_name like CONCAT('%',#{studentName},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
