@@ -1,12 +1,12 @@
 # DormAdmin
 
-####  宿舍管理系统
-SpringBoot+Vue 前后端分离  简单实现
+####  介绍
+使用SpringBoot+Vue前后端分离  简单实现的宿舍管理系统
 
 涉及Spring Security, Mybatis
 
 
-#### 使用说明
+#### 使用
 
 1.  导入sql文件
 2.  使用ide导入项目dorm-admin 更新maven
