@@ -97,7 +97,7 @@ INSERT INTO `menu` VALUES (5, '/', '/home', 'Home', '用户管理', 'fa fa-users
 INSERT INTO `menu` VALUES (6, '/', '/home', 'Home', '系统管理', 'fa fa-wrench', NULL, 1, 1, 1);
 INSERT INTO `menu` VALUES (7, '/api/student/**', '/student/profile', 'StudentProfile', '学生资料', NULL, NULL, 1, 2, 1);
 INSERT INTO `menu` VALUES (8, '/api/building/**', '/building/info', 'BuildingInfo', '楼层信息', NULL, NULL, 1, 3, 1);
-INSERT INTO `menu` VALUES (9, '/api/room/**', '/room/details', 'RoomDetails', '宿舍详情', NULL, NULL, 1, 4, 1);
+INSERT INTO `menu` VALUES (9, '/api/dorm/**', '/dorm/details', 'DormDetails', '宿舍详情', NULL, NULL, 1, 4, 1);
 INSERT INTO `menu` VALUES (10, '/api/user/**', '/user/info', 'UserInfo', '用户信息', NULL, NULL, 1, 5, 1);
 INSERT INTO `menu` VALUES (11, '/api/system/**', '/system/profile', 'SystemProfile', '系统资料', NULL, NULL, 1, 6, 1);
 
